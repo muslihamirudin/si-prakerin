@@ -612,7 +612,8 @@ class Seminar extends MY_Controller
 			$dosens = datajoin('tb_dosen', $where, $select, $join);
 			$data['dosens'][$prodi->id_program_studi] = $dosens;
 			foreach ($dosens as $dosen) {
-				$data['penguji'][$dosen->id] = masterdata('tb_seminar_penguji', "id_dosen = $dosen->id", '*', true, 'status');
+				$data['penguji'][$dosen->id] = masterdata('tb_seminar_penguji', "id_dosen = $dosen->id", '*', 
+				true, 'status');
 			}
 			$data['tempat'] = $seminar->count_tempat();
 			$data['waktu'] = $seminar->count_waktu();

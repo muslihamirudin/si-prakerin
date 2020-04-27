@@ -70,8 +70,7 @@
 								<div class="col-8">
 									<h3 class="mb-0">Tahun Akademik</h3>
 									<p class="text-sm mb-0">
-										This is an example of user management. This is a minimal setup in order to get
-										started fast.
+										Berikut Merupakan Data Tahun Akademik. Admin dapat menambahkannya pada tombol "Add Tahun Akademik"
 									</p>
 								</div>
 								<div class="col-4 text-right">

@@ -5,7 +5,7 @@ class User extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array('mahasiswa_model', 'konsultasi_model', 'pembimbing_model', 'penilaian_model'));
+		$this->load->model(array('mahasiswa_model', 'konsultasi_model', 'pembimbing_model', 'penilaian_model', 'seminar_model'));
 		$this->load->model('pegawai_model');
 		$this->load->library('form_validation');
 		$this->load->helper('notification');
@@ -15,7 +15,9 @@ class User extends CI_Controller
 	//dashboard user
 	public function index()
 	{
+		// $id = $this->session->userdata('id');
 		$level = $this->session->userdata('level');
+		
 		switch ($level) {
 			case 'mahasiswa':
 				$data['menus'] = array(
@@ -26,6 +28,11 @@ class User extends CI_Controller
 						'message_intro' => 'SIG Perusahaan merupakan aplikasi geografis perusahaan, meliputi letak geografis, dan data penting terkait perusahaan magang anda',
 						'desc' => 'Sistem Informasi Pemetaan Mahasiswa yang melaksanakan Praktik Kerja Industri Politeknik Negeri Tanah Laut'),
 				);
+				
+				// $data=array();
+				// $where="WHERE tm.nim = '$id'";
+				// $data['jadwalku'] = $this->seminar_model->tampil_tgl($where);
+
 				$data['mahasiswa'] = $this->mahasiswa_model->getById();
 				$data['latest_bimbingan'] = $this->konsultasi_model->show_latest_bimbingan();
 				$data['get_pembimbing'] = $this->pembimbing_model->is_has();

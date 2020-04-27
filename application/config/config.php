@@ -26,6 +26,7 @@ date_default_timezone_set('Asia/Makassar');
 $config['base_url'] = "http://".$_SERVER['HTTP_HOST'].str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 //$config['base_url'] = "http://".$_SERVER['HTTP_HOST'].str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 // $config['base_url'] = 'http://localhost/archive/';
+//$config['base_url'] = 'http://localhost/si-prakerin';
 
 /*
 |--------------------------------------------------------------------------

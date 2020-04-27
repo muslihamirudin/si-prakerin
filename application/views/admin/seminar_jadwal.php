@@ -90,7 +90,7 @@
 											<div class="col-lg-4 col-md-4 col-sm-12">
 												<div class="form-group collapse" id="form-ruangan">
 													<input class="form-control form-control-sm" name="ruangan" value=""
-														   placeholder="Masukkan Nama Ruangan"/>
+													  placeholder="Masukkan Nama Ruangan"/>
 												</div>
 											</div>
 										</div>
