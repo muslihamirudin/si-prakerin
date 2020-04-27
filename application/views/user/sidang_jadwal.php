@@ -60,6 +60,7 @@
 										<div class="h5 mt-2">Lihat jadwal sendiri :</div>
 										<button type="button" class="btn btn-sm btn-warning" id="btn-hari">Lihat
 										</button>
+										<?php var_dump($jadwalku) ?>
 									</div>
 								<?php endif; ?>
 								<?php if ($this->session->userdata('level') == "dosen"): ?>

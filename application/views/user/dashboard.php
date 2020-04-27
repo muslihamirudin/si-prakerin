@@ -52,6 +52,31 @@
 				<div class="card">
 					<div class="card-header"><h3>Pengingatmu</h3></div>
 					<div class="card-body">
+					<?php foreach ($jadwalku as $waktusem): ?>
+					<tr>
+					<td><?php echo $waktusem->mulai ?></td>
+					<?php 
+					$tanggal_mulai= date('Y-m-d',strtotime(explode('T',$waktusem->mulai)[0]));
+					// $tanggal_mulai= strtotime(explode('T',$waktusem->mulai)[0]);
+					// $now= strtotime(date('Y-M-d'));
+					
+					// echo "Batas: ".($now - $tanggal_mulai)/60/60/24;
+					?>
+					</tr>
+					<script type="text/javascript">
+
+					// 15 days from now!
+					function setDayForTimer() {
+						return new Date(new Date('<?= date("m/d/Y", strtotime($tanggal_mulai)); ?>').valueOf() + (1 - 1) * 24 * 60 * 60 * 1000);
+					}
+
+					var $clock = $('#clock');
+
+					$clock.countdown(setDayForTimer(), function(event) {
+						$(this).html(event.strftime('%D Hari %H Jam :%M Menit :%S Detik'));
+					});
+					</script>
+					<?php endforeach ?>
 					</div>
 				</div>
 				<div class="card">

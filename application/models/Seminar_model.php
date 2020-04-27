@@ -493,8 +493,11 @@ class Seminar_model extends CI_Model
 		return false;
 	}
 
-	public function tampil_tgl()
+	public function tampil_tgl($id)
+
 	{
-		$this->db->query("SELECT tsj.id, tm.nama_mahasiswa nama, tsj.mulai, tsj.berakhir FROM tb_seminar_jadwal tsj INNER JOIN tb_mahasiswa WHERE tm.nim = '$id'")->result();
+		
+		$hasil=$this->db->query("SELECT tsj.id, tm.nama_mahasiswa nama, tsj.mulai, tsj.berakhir FROM tb_seminar_jadwal tsj INNER JOIN tb_mahasiswa tm WHERE tm.nim = '$id'")->result();
+		return $hasil;
 	}
 }

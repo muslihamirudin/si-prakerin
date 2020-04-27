@@ -15,11 +15,13 @@ class User extends CI_Controller
 	//dashboard user
 	public function index()
 	{
-		// $id = $this->session->userdata('id');
+		$id = $this->session->userdata('id');
 		$level = $this->session->userdata('level');
 		
 		switch ($level) {
 			case 'mahasiswa':
+				$data=array();
+				
 				$data['menus'] = array(
 					array('name' => 'SIG Perusahaan',
 						'href' => 'https://simpkl.politala.ac.id/sig/home',
@@ -29,9 +31,7 @@ class User extends CI_Controller
 						'desc' => 'Sistem Informasi Pemetaan Mahasiswa yang melaksanakan Praktik Kerja Industri Politeknik Negeri Tanah Laut'),
 				);
 				
-				// $data=array();
-				// $where="WHERE tm.nim = '$id'";
-				// $data['jadwalku'] = $this->seminar_model->tampil_tgl($where);
+				
 
 				$data['mahasiswa'] = $this->mahasiswa_model->getById();
 				$data['latest_bimbingan'] = $this->konsultasi_model->show_latest_bimbingan();
@@ -46,6 +46,9 @@ class User extends CI_Controller
 				}
 				$data['intro'] = array(array('step_intro' => '5', 'message_intro' => 'Pastikan melihat informasi terlebih dahulu'), array('step_intro' => '6', 'message_intro' => 'Klik foto profil, dan pergi ke My Profile, dan ubah profil anda ketika pertama kali login. Hal ini bertujuan agar kalian bisa melakukan proses pengajuan magang'));
 				$data['intro_dashboard'] = true;
+
+				$data['jadwalku'] = $this->seminar_model->tampil_tgl($id);
+
 				break;
 			case 'dosen':
 				$data['menus'] = array(
