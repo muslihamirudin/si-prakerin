@@ -50,33 +50,71 @@
 			</div>
 			<div class="col-xl-8">
 				<div class="card">
-					<div class="card-header"><h3>Pengingatmu</h3></div>
+
+
+					<div class="card-header"><h3>Pengingatmu | Hari Ini: <?php echo nama_hari(date('Y-m-d')).', '. tgl_indo(date('Y-m-d')); ?></h3></div>
 					<div class="card-body">
-					<?php foreach ($jadwalku as $waktusem): ?>
-					<tr>
-					<td><?php echo $waktusem->mulai ?></td>
-					<?php 
-					$tanggal_mulai= date('Y-m-d',strtotime(explode('T',$waktusem->mulai)[0]));
-					// $tanggal_mulai= strtotime(explode('T',$waktusem->mulai)[0]);
-					// $now= strtotime(date('Y-M-d'));
+					 <h3>Hari Seminar :</h3>
+					 <?php foreach ($jadwalku as $waktusem): ?>
+					 <?php echo nama_hari(explode('T',$waktusem->mulai)[0]).', '. tgl_indo(explode('T',$waktusem->mulai)[0]); ?>
+					 <?php endforeach ?>
+					 
+     				 <div class="panel panel-default" data-toggle="tooltip" data-placement="right" title="Waktu Tenggat Menuju Seminar Anda">
+         			 </br><h3>Waktu Menuju Seminar :</h3>
+					 <div class="lead" id="clock"></div>
+					 </div>
+					<?php $tanggal_mulai= date('Y-m-d',strtotime(explode('T',$waktusem->mulai)[0]));?>
 					
-					// echo "Batas: ".($now - $tanggal_mulai)/60/60/24;
-					?>
-					</tr>
+					</br><h3>Batas Waktu Pendaftaran Seminar (H-2 Waktu Seminar) :</h3>
+					<div class="lead" id="clock2"></div>
+					<a href= "sidang?m=pendaftaran" class="btn btn-outline-danger btn-sm">Lakukan Pendaftaran</a>			
+					<!-- </br><h3>Batas Waktu Revisi Laporan (H+7 Setelah Seminar) :</h3>
+					<div class="lead" id="clock3"></div> -->
+
+					<!-- </br><h3>Batas Waktu Pengumpulan Berkas (H+7 Setelah Batas Revisi Laporan Selesai) :</h3>
+					<div class="lead" id="clock4"></div> -->
 					<script type="text/javascript">
 
+					$('[data-toggle="tooltip"]').tooltip();
 					// 15 days from now!
 					function setDayForTimer() {
 						return new Date(new Date('<?= date("m/d/Y", strtotime($tanggal_mulai)); ?>').valueOf() + (1 - 1) * 24 * 60 * 60 * 1000);
 					}
 
+					function setDayForTimer2() {
+						return new Date(new Date('<?= date("m/d/Y", strtotime('-2 days', strtotime($tanggal_mulai))); ?>').valueOf() + (1 - 1) * 24 * 60 * 60 * 1000);
+					}
+
+					function setDayForTimer3() {
+						return new Date(new Date('<?= $berkaz=date("m/d/Y", strtotime('+7 days', strtotime($tanggal_mulai))); ?>').valueOf() + (1 - 1) * 24 * 60 * 60 * 1000);
+					}
+
+					function setDayForTimer4() {
+						return new Date(new Date('<?= date("m/d/Y", strtotime('+7 days', strtotime($berkaz))); ?>').valueOf() + (1 - 1) * 24 * 60 * 60 * 1000);
+					}
+
 					var $clock = $('#clock');
+					var $clock2 = $('#clock2');
+					// var $clock3 = $('#clock3');
+					// var $clock4 = $('#clock4');
 
 					$clock.countdown(setDayForTimer(), function(event) {
-						$(this).html(event.strftime('%D Hari %H Jam :%M Menit :%S Detik'));
+						$(this).html(event.strftime('%D Hari : %H Jam : %M Menit : %S Detik'));
+					});
+
+					$clock2.countdown(setDayForTimer2(), function(event) {
+						$(this).html(event.strftime('<h1> %D Hari : %H Jam : %M Menit : %S Detik </h1>'));
+					});
+
+					$clock3.countdown(setDayForTimer3(), function(event) {
+						$(this).html(event.strftime('<h1> %D Hari : %H Jam : %M Menit : %S Detik </h1>'));
+					});
+
+					$clock4.countdown(setDayForTimer4(), function(event) {
+						$(this).html(event.strftime('<h1> %D Hari : %H Jam : %M Menit : %S Detik </h1>'));
 					});
 					</script>
-					<?php endforeach ?>
+					
 					</div>
 				</div>
 				<div class="card">
@@ -91,6 +129,40 @@
 								<h5><?php echo $informasi->pesan ?> <a href="<?php echo $informasi->uri ?>"><b>Klik disini untuk mengisi</b></a></h5>
 							</div>
 						<?php endif; ?>
+
+						<!-- Display the countdown timer in an element -->
+<p id="demo"></p>
+
+<script>
+// Set the date we're counting down to
+var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s ";
+
+  // If the count down is finished, write some text
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "EXPIRED";
+  }
+}, 1000);
+</script>
 					</div>
 				</div>
 			</div>
@@ -225,6 +297,7 @@
 <!-- Scripts PHP-->
 <?php $this->load->view('user/_partials/modal.php'); ?>
 <?php $this->load->view('user/_partials/js.php'); ?>
+
 <script>
 	$(document).ready(function () {
 		if (!localStorage.getItem('wizard')) {

@@ -12,6 +12,9 @@
     <link href="<?php echo base_url('aset/vendor/nucleo/css/nucleo.css') ?> " rel="stylesheet">
     <link href="<?php echo base_url('aset/vendor/@fortawesome/fontawesome-free/css/all.min.css') ?>" rel="stylesheet">
     <!-- Optional CSS -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script src="http://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
     <link rel="stylesheet" href="<?php echo base_url('aset/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('aset/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') ?>">
 	<link rel="stylesheet" href="<?php echo base_url('aset/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css') ?>">
@@ -28,7 +31,6 @@
 			background-color: #ff6666;
 			color: #fff;
 		}
-
 
 		.pulsate::before {
 			content: '';

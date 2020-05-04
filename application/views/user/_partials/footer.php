@@ -24,4 +24,16 @@
 			</ul>
 		</div>
 	</div>
-</footer
+</footer>
+
+<script>
+    $(document).ready(function() {
+
+        // To vanish the information above 
+
+        setTimeout(function() {
+          $(".alert-dismissable").fadeOut().empty();
+        }, 5000);
+		
+    });
+</script>

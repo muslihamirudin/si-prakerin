@@ -8,7 +8,7 @@ class User extends CI_Controller
 		$this->load->model(array('mahasiswa_model', 'konsultasi_model', 'pembimbing_model', 'penilaian_model', 'seminar_model'));
 		$this->load->model('pegawai_model');
 		$this->load->library('form_validation');
-		$this->load->helper('notification');
+		$this->load->helper('notification','tanggal_indo');
 		!$this->session->userdata('level') ? redirect(site_url('main')) : null;
 	}
 
