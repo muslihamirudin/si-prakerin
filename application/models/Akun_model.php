@@ -66,6 +66,10 @@ class Akun_model extends CI_Model
 					$this->db->select('tb_mahasiswa.nama_mahasiswa as nama');
 					$this->db->join('(select tm.*,tw.`id_tahun_akademik` as id_ta from tb_mahasiswa tm join tb_waktu tw on tm.id_tahun_akademik =tw.id_tahun_akademik) tb_mahasiswa', 'tb_mahasiswa.username = tb_akun.username', 'INNER');
 					break;
+				case 'peserta':
+					$this->db->select('tb_peserta.namapes as nama');
+					$this->db->join('(select tp.*,tw.`id_tahun_akademik` as id_ta from tb_peserta tp join tb_waktu tw on tp.id_tahun_akademik =tw.id_tahun_akademik) tb_peserta', 'tb_peserta.username = tb_akun.username', 'INNER');
+					break;
 			}
 		}
 		return $this->db->get()->result();
@@ -82,6 +86,19 @@ class Akun_model extends CI_Model
 			$this->db->insert('tb_level',$input_level);
 			$input_mahasiswa = array('username'=>$post['username'],'nim'=>$post['id'],'nama_mahasiswa'=>$post['nama'],'id_tahun_akademik'=>$post['id_ta'],'id_program_studi'=>$post['id_prodi']);
 			$this->db->insert('tb_mahasiswa',$input_mahasiswa);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() != false) {
+				redirect(site_url('akun'));
+			}
+		}
+		else if($post['mode'] === 'peserta'){
+			$this->db->trans_start();
+			$input_akun = array('username'=>$post['username'],'password'=>password_hash($post['password'], PASSWORD_DEFAULT));
+			$this->db->insert('tb_akun',$input_akun);
+			$input_level = array('username'=>$post['username'],'id_master_level'=>'IML009');
+			$this->db->insert('tb_level',$input_level);
+			$input_peserta = array('username'=>$post['username'],'nimpes'=>$post['id'],'namapes'=>$post['nama'],'id_tahun_akademik'=>$post['id_ta'],'id_program_studi'=>$post['id_prodi']);
+			$this->db->insert('tb_peserta',$input_peserta);
 			$this->db->trans_complete();
 			if ($this->db->trans_status() != false) {
 				redirect(site_url('akun'));

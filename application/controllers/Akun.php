@@ -15,6 +15,7 @@ class Akun extends CI_Controller
 	{
 		$data['pegawais'] = $this->akun_model->getAllAccounts('pegawai');
 		$data['mahasiswas'] = $this->akun_model->getAllAccounts('mahasiswa');
+		$data['pesertas'] = $this->akun_model->getAllAccounts('peserta');
 		$this->load->view('admin/akun', $data);
 	}
 
@@ -50,6 +51,7 @@ class Akun extends CI_Controller
 				$data['akuns'] = $this->akun_model->getAllAccounts('pegawai', $id);
 			} else {
 				$data['akuns'] = $this->akun_model->getAllAccounts('mahasiswa', $id);
+				$data['akuns'] = $this->akun_model->getAllAccounts('peserta', $id);
 			}
 		}
 		$this->load->view('admin/akun_management', $data);

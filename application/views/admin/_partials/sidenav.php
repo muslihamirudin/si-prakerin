@@ -75,6 +75,12 @@
 									<span class="nav-link-text">Dosen</span>
 								</a>
 							</li>
+								<li class="nav-item">
+								<a class="nav-link" href="<?php echo site_url('peserta') ?>">
+									<i class="fas fa-users text-warning"></i>
+									<span class="nav-link-text">Peserta Seminar</span>
+								</a>
+							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="<?php echo site_url('seminar') ?>">
 									<i class="fas fa-calendar-alt text-green"></i>

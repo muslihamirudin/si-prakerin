@@ -496,8 +496,9 @@ class Seminar_model extends CI_Model
 	public function tampil_tgl($id)
 
 	{
-		
-		$hasil=$this->db->query("SELECT tsj.id, tm.nama_mahasiswa nama, tsj.mulai, tsj.berakhir FROM tb_seminar_jadwal tsj INNER JOIN tb_mahasiswa tm WHERE tm.nim = '$id'")->result();
+		$hasil=$this->db->query("SELECT tsj.id, tm.nama_mahasiswa, tsj.id_dosen_bimbingan_mhs, tsj.mulai, tsj.berakhir FROM tb_seminar_jadwal tsj
+		 INNER JOIN tb_dosen_bimbingan_mhs tdbm ON tsj.id_dosen_bimbingan_mhs = tdbm.id_dosen_bimbingan_mhs
+		 INNER JOIN tb_mahasiswa tm ON tm.nim = tdbm.nim WHERE tm.nim = '$id'")->result();
 		return $hasil;
 	}
 }

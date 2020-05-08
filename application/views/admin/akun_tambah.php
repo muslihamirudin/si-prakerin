@@ -58,6 +58,9 @@
 													NIM</small>
 												<small id="username" class="form-text text-muted">*Pegawai gunakan
 													e-mail</small>
+												<small id="username" class="form-text text-muted">*Peserta Seminar gunakan
+													NIM</small>
+												
 											</div>
 										</div>
 										<div class="col-6">
@@ -82,6 +85,8 @@
 													NIP/ NIK untuk Pegawai</small>
 												<small id="password" class="form-text text-muted">*Masukkan
 													NIM untuk mahasiswa</small>
+												<small id="password" class="form-text text-muted">*Masukkan
+													NIM untuk Peserta Seminar</small>
 											</div>
 										</div>
 									</div>
@@ -95,6 +100,11 @@
 										<input name="mode" class="custom-control-input" id="customRadioP" type="radio"
 											   value="pegawai">
 										<label class="custom-control-label" for="customRadioP">Pegawai</label>
+									</div>
+									<div class="custom-control custom-radio mb-3">
+										<input name="mode" class="custom-control-input" id="customRadioPs" type="radio"
+											   value="peserta">
+										<label class="custom-control-label" for="customRadioPs">Peserta</label>
 									</div>
 								</div>
 								<div class="col-6 d-flex flex-column align-content-end justify-content-between">
@@ -131,6 +141,24 @@
 											<?php endforeach; ?>
 										</select>
 									</div>
+									<div id="level_peserta" style="display:none">
+										<label for="">Pilih Tahun Akademik</label>
+										<select class="select_3_level" name="id_ta">
+											<?php foreach ($ta as $key => $t): ?>
+												<option
+													value="<?php echo $t->id_tahun_akademik ?>"><?php echo ucfirst($t->tahun_akademik) ?></option>
+											<?php endforeach; ?>
+										</select>
+
+										<label for="">Pilih level untuk peserta</label>
+										<select class="select_4_level" name="level[]" multiple>
+											<?php foreach ($levels as $key => $level): ?>
+												<option
+													value="<?php echo $level->id_master_level ?>"><?php echo ucfirst($level->nama_master_level) ?></option>
+											<?php endforeach; ?>
+										</select>
+										
+									</div>
 									<div>
 										<button class="mt-2 btn btn-sm btn-primary float-right text-right" name="submit"
 												type="submit">
@@ -158,9 +186,15 @@
 		if (val === 'pegawai') {
 			$('#level_pegawai').css('display', 'block');
 			$('#level_mahasiswa').css('display', 'none');
-		} else {
+			$('#level_peserta').css('display', 'none');
+		} else if (val === 'mahasiswa') {
 			$('#level_pegawai').css('display', 'none');
 			$('#level_mahasiswa').css('display', 'block');
+			$('#level_peserta').css('display', 'none');
+		} else {
+			$('#level_pegawai').css('display', 'none');
+			$('#level_mahasiswa').css('display', 'none');
+			$('#level_peserta').css('display', 'block');
 		}
 	})
 	$('.select_2_level').select2({
@@ -173,6 +207,12 @@
 	})
 	$('.select_3_level').select2({
 		placeholder: "Pilih Program Studi (bisa lebih dari satu)"
+	})
+
+	$('.select_4_level').select2({
+		maximumSelectionLength: 5,
+		multiple: true,
+		placeholder: "Pilih level (bisa lebih dari satu)"
 	})
 </script>
 <!-- Demo JS - remove this in your project -->

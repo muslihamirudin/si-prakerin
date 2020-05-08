@@ -50,13 +50,63 @@ $mhs = masterdata('tb_mahasiswa', "nim = '$nim'", 'nama_mahasiswa nama') ?>
 			<div class="card">
 				<div class="card-header">
 					<div class="h3">Pendaftaran Seminar</div>
+					<?php foreach ($jadwalku as $waktuseminar): ?>
+					 <?php $tenggat= date('Y-m-d', strtotime('-2 days', strtotime(explode('T',$waktuseminar->mulai)[0])));?>
+					 <p id="tenggat">Tenggat Pendaftaran : <?php echo nama_hari($tenggat).', '. tgl_indo($tenggat); ?></p>
+					 <?php endforeach ?>
+
+					 <?php $tanggal_mulai= date('Y-m-d',strtotime(explode('T',$waktuseminar->mulai)[0]));?>
+					 <p id="judcount2">Batas Waktu Pendaftaran Seminar: </p>
+					 <h1 id="count2"></h1>
+					 <script>
+					//Countdown Waktu Menuju Seminar
+					// Set the date we're counting down to
+					var countDownDate2 = new Date('<?= date("m/d/Y", strtotime('-2 days', strtotime($tanggal_mulai))); ?>').getTime();
+
+					// Update the count down every 1 second
+					var x = setInterval(function() {
+
+					// Get today's date and time
+					var now2 = new Date().getTime();
+
+					// Find the distance between now and the count down date
+					var distance2 = countDownDate2 - now2;
+
+					// Time calculations for days, hours, minutes and seconds
+					var days2 = Math.floor(distance2 / (1000 * 60 * 60 * 24));
+					var hours2 = Math.floor((distance2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+					var minutes2 = Math.floor((distance2 % (1000 * 60 * 60)) / (1000 * 60));
+					var seconds2 = Math.floor((distance2 % (1000 * 60)) / 1000);
+
+					// Display the result in the element with id="demo"
+					document.getElementById("count2").innerHTML = days2 + " Hari : " + hours2 + " Jam : "
+					+ minutes2 + " Menit : " + seconds2 + " Detik ";
+					
+					// If the count down is finished, write some text
+					if (distance2 < 0) {
+						clearInterval(x);
+						$('#count2').hide();
+
+					}
+					}, 1000);
+
+				
+					</script>
+
 				</div>
 				<div class="card-body">
+					
 					<?php if ($reupload): ?>
 						<div class="alert alert-danger alert-dismissible fade show" role="alert">
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
+							<script>
+							clearInterval(x);
+							$('#judcount2').hide();
+							$('#tenggat').hide();
+							$('#count2').hide();
+							</script>
 							<strong>Pendaftaran Gagal</strong>
 							<small>Koordinator menginginkan anda mengupload ulang berkas pendaftaran seminar</small>
 						</div>
@@ -97,6 +147,12 @@ $mhs = masterdata('tb_mahasiswa', "nim = '$nim'", 'nama_mahasiswa nama') ?>
 							<strong><?php echo $success ? 'Sukses' : 'Pending' ?></strong>
 							<small><?php echo $success ? 'Pendaftaran telah di konfirmasi, anda di ijinkan untuk seminar' : 'Menunggu pendaftaran di verifikasi oleh koordinator' ?></small>
 						</div>
+						<script>
+						clearInterval(x);
+						$('#count2').hide();
+						$('#judcount2').hide();
+						$('#tenggat').hide();
+						</script>
 						<div class="h3">ANDA TELAH MENGUPLOAD BERKAS PENDAFTARAN</div>
 						<div class="h5">* Catatan</div>
 						<div class="h6 font-weight-normal">- Apabila berkas yang kalian upload kurang lengkap,

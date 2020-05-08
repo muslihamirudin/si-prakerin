@@ -8,7 +8,7 @@ class Sidang extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model(array('perusahaan_model', 'pengajuan_model', 'seminar_model', 'penilaian_model'));
-		$this->load->helper(array('notification', 'master', 'upload'));
+		$this->load->helper(array('notification', 'master', 'upload','tanggal_indo'));
 		!$this->session->userdata('level') ? redirect(site_url('main')) : null;
 		$id = $this->session->userdata('id');
 		$mahasiswa = masterdata('tb_mahasiswa', array('nim' => $id), array('alamat_mhs', 'email_mhs', 'jenis_kelamin_mhs'), false);
@@ -20,6 +20,7 @@ class Sidang extends CI_Controller
 
 	public function index()
 	{
+		
 		$level = $this->session->userdata('level');
 		switch ($level) {
 			case 'mahasiswa':
@@ -37,6 +38,7 @@ class Sidang extends CI_Controller
 						'icon' => 'fas fa-building',
 						'desc' => 'Penilaian peserta seminar prakerin'),
 				);
+				
 				break;
 			case 'dosen':
 				$data['menus'] = array(
@@ -119,6 +121,7 @@ class Sidang extends CI_Controller
 
 	public function index_pendaftaran_seminar()
 	{
+		$id = $this->session->userdata('id');
 		$data = array();
 		$seminar = $this->seminar_model;
 		$data_seminar = $seminar->get_self_mahasiswa_seminar();
@@ -143,6 +146,7 @@ class Sidang extends CI_Controller
 			}
 
 		}
+		$data['jadwalku'] = $this->seminar_model->tampil_tgl($id);
 		$this->load->view('user/sidang_pendaftaran', $data);
 	}
 

@@ -4,7 +4,8 @@
 <?php  $this->load->view('admin/_partials/header.php');
 $pegawais = isset($pegawais)?$pegawais:array();
 $mahasiswas = isset($mahasiswas)?$mahasiswas:array();
-$akuns = array_merge($pegawais,$mahasiswas);
+$pesertas = isset($pesertas)?$pesertas:array();
+$akuns = array_merge($pegawais,$mahasiswas,$pesertas);
 
 ?>
 

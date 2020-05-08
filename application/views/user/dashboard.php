@@ -49,18 +49,21 @@
 				<?php endforeach; ?>
 			</div>
 			<div class="col-xl-8">
+
 				<div class="card">
-					<div class="card-header"><h3>Pengingatmu | Hari Ini: <?php echo nama_hari(date('Y-m-d')).', '. tgl_indo(date('Y-m-d')); ?></h3></div>
+					<?php $level = $this->session->userdata('level'); ?>
+					<?php if ($level === 'mahasiswa') : //mahasiswa?>
+					<div class="card-header">
+					<h5 class="h3 mb-0">Pengingat! | Hari Ini: <?php echo nama_hari(date('Y-m-d')).', '. tgl_indo(date('Y-m-d')); ?></h5>
+					</div>
 					<div class="card-body">
-					 <h3>Hari Seminar :</h3>
-					 <?php foreach ($jadwalku as $waktusem): ?>
+					 <h3 id="titel">Hari Seminar : <?php foreach ($jadwalku as $waktusem): ?>
 					 <?php echo nama_hari(explode('T',$waktusem->mulai)[0]).', '. tgl_indo(explode('T',$waktusem->mulai)[0]); ?>
-					 <?php endforeach ?>
-					 
-         			 </br>
+					 <?php endforeach ?></h3>
+					
 					 </br>
 					 <h3 id="judcount">Waktu Menuju Seminar :</h3>
-					 <h2 id="count"></h2>
+					 <h1 id="count"></h1>
 					<?php $tanggal_mulai= date('Y-m-d',strtotime(explode('T',$waktusem->mulai)[0]));?>
 								
 					<script>
@@ -90,58 +93,18 @@
 					// If the count down is finished, write some text
 					if (distance < 0) {
 						clearInterval(x);
+						$('#titel').hide();
+						$('#count').hide();
 						$('#judcount').hide();
-						document.getElementById("count").innerHTML = "Hari ini adalah Hari Seminar Anda. Semangat!";
 
 					}
 					}, 1000);
 
 				
 					</script>
-
-					</br><h3 id="judcount2">Batas Waktu Pendaftaran Seminar (H-2 Waktu Seminar) :</h3>
-					<h1 id="count2"></h1>
-					<a id="but" href= "sidang?m=pendaftaran" class="btn btn-outline-danger btn-sm">Lakukan Pendaftaran</a>
-										<script>
-					//Countdown Waktu Menuju Seminar
-					// Set the date we're counting down to
-					var countDownDate2 = new Date('<?= date("m/d/Y", strtotime('-2 days', strtotime($tanggal_mulai))); ?>').getTime();
-
-					// Update the count down every 1 second
-					var x = setInterval(function() {
-
-					// Get today's date and time
-					var now2 = new Date().getTime();
-
-					// Find the distance between now and the count down date
-					var distance2 = countDownDate2 - now2;
-
-					// Time calculations for days, hours, minutes and seconds
-					var days2 = Math.floor(distance2 / (1000 * 60 * 60 * 24));
-					var hours2 = Math.floor((distance2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-					var minutes2 = Math.floor((distance2 % (1000 * 60 * 60)) / (1000 * 60));
-					var seconds2 = Math.floor((distance2 % (1000 * 60)) / 1000);
-
-					// Display the result in the element with id="demo"
-					document.getElementById("count2").innerHTML = days2 + " Hari : " + hours2 + " Jam : "
-					+ minutes2 + " Menit : " + seconds2 + " Detik ";
-					
-					// If the count down is finished, write some text
-					if (distance2 < 0) {
-						clearInterval(x);
-						$('#but').hide();
-						document.getElementById("count2").innerHTML = "Maaf Anda Tidak Dapat Melakukan Pendaftaran Seminar! Silakan Hubungi Admin";
-
-					}
-					}, 1000);
-
-				
-					</script>
-
+					<?php endif; ?>
 					</div>
 				</div>
-
-
 
 				<div class="card">
 					<div class="card-header"><h3>Informasimu</h3></div>
@@ -159,8 +122,8 @@
 					</div>
 				</div>
 			</div>
-	
 		</div>
+
 		<div class="row">
 			<div class="col-xl-4"></div>
 			<div class="col-xl-8">
@@ -197,6 +160,8 @@
 										<small>Kalian harus konsultasi minimal <b>4 Kali</b> untuk bisa mengajukan
 											sidang</small>
 									</div>
+
+									
 								<?php endif; ?>
 								<div style="max-height: 400px;overflow-x: scroll;-ms-overflow-x: scroll">
 									<ul class="list-group list-group-flush" data-toggle="checklist">
