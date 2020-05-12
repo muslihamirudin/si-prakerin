@@ -45,6 +45,10 @@ class Login extends CI_Controller {
 						$this->session->set_userdata( 'nip_nik', $pegawai->nip_nik );
 						//                  $programstudi = masterdata( 'tb_pegawai',array('tb_pegawai.username'=>$isValidAkun[0]->id),'id_program_studi');
 						break;
+					case 'peserta':
+						$programstudie = masterdata( 'tb_peserta', array( 'nimpes' => $isValidAkun[0]->id ), 'id_program_studi' );
+						$this->session->set_userdata( 'prodi', $programstudie->id_program_studi );
+						break;
 					default:
 						$this->session->set_flashdata( 'fail', 'Gagal untuk Login, pastikan mengisi username dan password dengan benar' );
 						redirect( site_url( 'login' ) );
@@ -83,6 +87,14 @@ class Login extends CI_Controller {
 					case 'admin':
 						$pegawai = masterdata( 'tb_pegawai', array( 'username' => $isValidAkun[0]->id ), 'tb_pegawai.nip_nik' );
 						$this->session->set_userdata( 'nip_nik', $pegawai->nip_nik );
+						break;
+					case 'peserta':
+						$programstudi_by_tahun = masterdata( '(select tp.*,tw.`id_tahun_akademik` as id_ta from tb_peserta tp join tb_waktu tw on tp.id_tahun_akademik =tw.id_tahun_akademik) tb_peserta', array( 'nimpes' => $isValidAkun[0]->id ), 'id_program_studi' );
+						if(count( (array)$programstudi_by_tahun) == 0){
+							$this->session->set_flashdata( 'fail', 'Gagal untuk Login, Anda tidak dijinkan login pada semester ini' );
+							redirect( site_url( 'login' ) );
+						}
+						$this->session->set_userdata( 'prodi', $programstudi_by_tahun->id_program_studi );
 						break;
 					default:
 						redirect( site_url( 'login' ) );

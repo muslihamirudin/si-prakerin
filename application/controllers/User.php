@@ -5,7 +5,7 @@ class User extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array('mahasiswa_model', 'konsultasi_model', 'pembimbing_model', 'penilaian_model', 'seminar_model'));
+		$this->load->model(array('mahasiswa_model', 'konsultasi_model', 'pembimbing_model', 'penilaian_model', 'seminar_model', 'peserta_model'));
 		$this->load->model('pegawai_model');
 		$this->load->library('form_validation');
 		$this->load->helper('notification','tanggal_indo');
@@ -19,7 +19,7 @@ class User extends CI_Controller
 		$level = $this->session->userdata('level');
 		
 		switch ($level) {
-			case 'mahasiswa':
+			case 'mahasiswa' :
 				$data=array();
 				
 				$data['menus'] = array(
@@ -62,6 +62,16 @@ class User extends CI_Controller
 				$data['dosen'] = $this->pegawai_model->getById();
 				$data['all_latest_bimbingan'] = $this->konsultasi_model->show_all_latest_bimbingan();
 				break;
+			case 'peserta':
+				$data['menus'] = array(
+					array('name' => 'SIG Perusahaan',
+						'href' => 'https://simpkl.politala.ac.id/sig/home',
+						'icon' => 'ni ni-square-pin',
+						'step_intro' => '2',
+						'message_intro' => 'SIG Perusahaan merupakan aplikasi geografis perusahaan, meliputi letak geografis, dan data penting terkait perusahaan magang anda',
+						'desc' => 'Sistem Informasi Pemetaan Mahasiswa yang melaksanakan Praktik Kerja Industri Politeknik Negeri Tanah Laut'),
+				);
+				break;
 			default:
 				$data['menus'] = array();
 				redirect(site_url('main'));//@TODO:change this, clean code
@@ -79,6 +89,9 @@ class User extends CI_Controller
 				break;
 			case 'dosen':
 				$data['profile'] = $this->pegawai_model->getById($id);
+				break;
+			case 'peserta':
+				$data['profile'] = $this->peserta_model->getById($id);
 				break;
 			default:
 				$data['profile'] = null;
@@ -107,6 +120,20 @@ class User extends CI_Controller
 				break;
 			case 'dosen':
 				$data['profile'] = $this->pegawai_model->getById($id);
+				break;
+			case 'peserta':
+				if (!isset($id)) redirect('prodi');
+				$peserta = $this->$peserta_model;
+				$validation = $this->form_validation;
+				$validation->set_rules($peserta->rules());
+				if ($validation->run()) {
+					$peserta->update();
+					update_notification('read', 'profil', $id);
+					$this->session->set_flashdata('status', 'Berhasil dirubah');
+
+				} else {
+					$this->session->set_flashdata('status', 'Gagal Mengubah');
+				}
 				break;
 			default:
 				$data['profile'] = null;

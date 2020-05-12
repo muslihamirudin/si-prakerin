@@ -24,19 +24,25 @@ class Peserta extends CI_Controller
 						'href' => site_url('peserta?m=pesertaseminar'),
 						'icon' => 'fas fa-users',
 						'desc' => 'Mahasiswa yang berhak menyaksikan Seminar'
-                    )  
+					),
+					// array(
+					// 	'name' => 'Verifikasi Peserta Seminar ' . $tahunAkademik[0]->tahun_akademik,
+					// 	'href' => site_url('peserta?m=versem'),
+					// 	'icon' => 'fas fa-calendar',
+					// 	'desc' => 'Manajemen dosen Peserta Seminar ' . $tahunAkademik[0]->tahun_akademik
+					// ), 
 				);
                 break;
-            case 'dosen':
-				$data['menus'] = array(
-					array(
-						'name' => 'Verifikasi Peserta Seminar ' . $tahunAkademik[0]->tahun_akademik,
-						'href' => site_url('peserta?m=versem'),
-						'icon' => 'fas fa-get-pocket',
-						'desc' => 'Manajemen dosen Peserta Seminar ' . $tahunAkademik[0]->tahun_akademik
-					)
-				);
-				break;
+            // case 'dosen':
+			// 	$data['menus'] = array(
+			// 		array(
+			// 			'name' => 'Verifikasi Peserta Seminar ' . $tahunAkademik[0]->tahun_akademik,
+			// 			'href' => site_url('peserta?m=versem'),
+			// 			'icon' => 'fas fa-get-pocket',
+			// 			'desc' => 'Manajemen dosen Peserta Seminar ' . $tahunAkademik[0]->tahun_akademik
+			// 		)
+			// 	);
+			// 	break;
 			//if there are not level except in case, it will throw to error with code 403
 			default:
 				show_error("Access Denied. You Do Not Have The Permission To Access This Page On This
@@ -133,12 +139,12 @@ class Peserta extends CI_Controller
 		if (!isset($id)) {
 			show_404();
 		}
-		if ($this->mahasiswa_model->delete($id)) {
+		if ($this->peserta_model->delete($id)) {
 			$this->session->set_flashdata('notif', (object)[
 				'message' => 'Data berhasil dihapus',
 				'type' => 'success'
 			]);
-			redirect(site_url('mahasiswa?m=magang'));
+			redirect(site_url('peserta?m=pesertaseminar'));
 		} else {
 			$this->session->set_flashdata('notif', (object)['message' => 'Data gagal dihapus', 'type' => 'fail']);
 		}

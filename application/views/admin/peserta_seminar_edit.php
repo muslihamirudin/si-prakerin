@@ -6,7 +6,7 @@
 <?php $current_tahun_akademik = getCurrentTahun();
 $program_studies = masterdata( 'tb_program_studi');
 $id = $this->uri->segment(3);
-$mahasiswa = masterdata( 'tb_mahasiswa',"nim = '$id'");
+$peserta = masterdata( 'tb_peserta',"nimpes = '$id'");
 ?>
 <body>
 <!-- Sidenav PHP-->

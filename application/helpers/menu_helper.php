@@ -19,7 +19,11 @@ if (!function_exists('getmenu')) {
 					(object)array('name' => 'Seminar',
 						'icon' => 'calendar-grid-58',
 						'color' => 'green',
-						'href' => site_url('sidang'))
+						'href' => site_url('sidang')),
+					(object)array('name' => 'Peserta Seminar',
+						'icon' => 'building',
+						'color' => 'orange',
+						'href' => site_url('peserta'))
 				);
 				break;
 			case 'mahasiswa':

@@ -12,6 +12,12 @@ if ($_SESSION['level'] == 'dosen') {
 	$pegawai = masterdata('tb_pegawai', "nip_nik = '$id'", 'nama_pegawai', false);
 	$nickname = $pegawai->nama_pegawai;
 }
+if ($_SESSION['level'] == 'peserta') {
+	$nimpes = $this->session->userdata('id');
+	$user = masterdata('tb_peserta', "nimpes = '$nimpes'", 'namapes');
+	$exploded_user = explode(" ", $user->namapes);
+	$nickname = $exploded_user[0];
+}
 $countNotification = count_notification($this->session->userdata('id'), 0);
 $dataNotification = get_notification($this->session->userdata('id'), 0);
 $level = $this->session->userdata('level');

@@ -330,6 +330,42 @@ class Akun_model extends CI_Model
 				$addtionalTable2 = 'tb_level';
 				$addtionalTable3 = 'tb_notification';
 				break;
+			case 'peserta':
+				$key = 'nimpes';
+				$replacers = array(
+					['old' => 'namapes', 'new' => 'namapes', 'keep' => false],
+					['old' => 'nimpes', 'new' => 'username', 'keep' => true]
+				);
+				$replacerLevel = [
+					[
+						'old' => 'nimpes',
+						'new' => 'username',
+						'keep' => false
+					]
+				];
+				$unsetDataLevel = ['id_program_studi', 'id_tahun_akademik', 'namapes'];
+				//fecting data needed
+				$idLevelMhs = masterdata('tb_master_level', ['nama_master_level' => 'peserta']);
+				$addtionalDataLevel['id_master_level'] = $idLevelMhs->id_master_level;
+
+
+				$addtionalDataNotif['pengirim'] = $this->session->userdata('level') ? $this->session->userdata('level') : null;
+				$addtionalDataNotif['pesan'] = 'Silahkan melengkapi profil terlebih dahulu !';
+				$addtionalDataNotif['hal'] = 'profil';
+				$addtionalDataNotif['uri'] = 'user/profile';
+				$unsetDataNotif = ['id_master_level'];
+				$replacerNotif = [
+					[
+						'old' => 'username',
+						'new' => 'penerima',
+						'keep' => false
+					]
+				];
+				$addtionalTable = 'tb_peserta';
+				$addtionalTable2 = 'tb_level';
+				$addtionalTable3 = 'tb_notification';
+
+				break;
 			default:
 				return 0;
 		}

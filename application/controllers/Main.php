@@ -24,7 +24,7 @@ class Main extends CI_Controller {
 
             break;
 
-            case 'mahasiswa' and 'dosen':
+            case 'mahasiswa' and 'dosen' and 'peserta':
                 redirect(site_url('user'));
             break;
 

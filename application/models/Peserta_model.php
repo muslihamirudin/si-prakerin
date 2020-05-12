@@ -44,7 +44,7 @@ class Peserta_model extends CI_Model {
 
     public function insert(){
 	    $statusInsert = false;
-    	$get_level = masterdata( 'tb_master_level','nama_master_level = "mahasiswa"');
+    	$get_level = masterdata( 'tb_master_level','nama_master_level = "peserta"');
     	$akun = new stdClass();
     	$level = new stdClass();
         $post = $this->input->post();
@@ -78,7 +78,7 @@ class Peserta_model extends CI_Model {
             $this->id_tahun_akademik = $post['id_tahun_akademik'];
             $this->id_program_studi = $post['id_program_studi'];
         }
-        $this->username = $post['nimpes'];
+        $this->username = $post['username'];
         $this->namapes = $post['namapes'];
         $this->db->update($this->_table,$this,[$this->_primary_key=>$post['nimpes']]);
     }

@@ -49,7 +49,23 @@
 				<?php endforeach; ?>
 			</div>
 			<div class="col-xl-8">
+				
+				<div class="card">
+					<div class="card-header"><h3>Informasimu</h3></div>
+					<div class="card-body">
+						<?php if(isset($informasi)): ?>
+							<div class="alert alert-warning alert-dismissible fade show" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<strong>Informasi</strong>
+								<h5><?php echo $informasi->pesan ?> <a href="<?php echo $informasi->uri ?>"><b>Klik disini untuk mengisi</b></a></h5>
+							</div>
+						<?php endif; ?>
 
+					</div>
+				</div>
+				
 				<div class="card">
 					<?php $level = $this->session->userdata('level'); ?>
 					<?php if ($level === 'mahasiswa') : //mahasiswa?>
@@ -105,22 +121,6 @@
 					<?php endif; ?>
 					</div>
 				</div>
-
-				<div class="card">
-					<div class="card-header"><h3>Informasimu</h3></div>
-					<div class="card-body">
-						<?php if(isset($informasi)): ?>
-							<div class="alert alert-warning alert-dismissible fade show" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-								<strong>Informasi</strong>
-								<h5><?php echo $informasi->pesan ?> <a href="<?php echo $informasi->uri ?>"><b>Klik disini untuk mengisi</b></a></h5>
-							</div>
-						<?php endif; ?>
-
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -136,8 +136,10 @@
 						<?php $level = $this->session->userdata('level'); ?>
 						<?php if ($level === 'mahasiswa') : //mahasiswa?>
 							<h5 class="h3 mb-0">Bimbinganmu</h5>
-						<?php else: //dosen?>
+						<?php elseif ($level === 'dosen'): ?>
 							<h5 class="h3 mb-0">Daftar Mahasiswa Bimbingan</h5>
+						<?php else: ?>
+							<h5 class="h3 mb-0">Jadwal Besok</h5>
 						<?php endif; ?>
 					</div>
 					<!-- Card body -->
@@ -243,7 +245,14 @@
 								</div>
 							<?php endif; ?>
 						<?php endif; ?>
+						<?php if ($level === 'peserta') : //mahasiswa?>
+							<p class="text-center text-sm">Berikut daftar bimbingan terakhirmu</p>
+							<div id="div-mode-bimbingan" class="text-md-center text-warning font-weight-bold"></div>
+							
+									</div>
 
+									
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
