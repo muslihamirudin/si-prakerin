@@ -501,4 +501,22 @@ class Seminar_model extends CI_Model
 		 INNER JOIN tb_mahasiswa tm ON tm.nim = tdbm.nim WHERE tm.nim = '$id'")->result();
 		return $hasil;
 	}
+
+	public function get_jadwal_sempes()
+	{
+		$hasil=$this->db->query("SELECT tsj.id, tm.nim, tm.nama_mahasiswa, tdbm.judul_laporan_mhs, tst.nama, tsj.mulai, tsj.berakhir, tp.nama_perusahaan FROM tb_seminar_jadwal tsj
+			INNER JOIN tb_dosen_bimbingan_mhs tdbm ON tsj.id_dosen_bimbingan_mhs = tdbm.id_dosen_bimbingan_mhs
+			INNER JOIN tb_mahasiswa tm ON tm.nim = tdbm.nim
+			INNER JOIN tb_seminar_tempat tst ON tst.id = tsj.id_seminar_ruangan
+			INNER JOIN tb_mhs_pilih_perusahaan tmpp ON tmpp.nim = tm.nim
+			INNER JOIN tb_perusahaan tp ON tmpp.id_perusahaan = tp.id_perusahaan")->result();
+		return $hasil;
+		// return $this->db->query("
+		// 	SELECT tsj.id, tm.nim, tm.nama_mahasiswa, tdbm.judul_laporan_mhs, tst.nama, tsj.mulai, tsj.berakhir, tp.nama_perusahaan FROM tb_seminar_jadwal tsj
+		// 	INNER JOIN tb_dosen_bimbingan_mhs tdbm ON tsj.id_dosen_bimbingan_mhs = tdbm.id_dosen_bimbingan_mhs
+		// 	INNER JOIN tb_mahasiswa tm ON tm.nim = tdbm.nim
+		// 	INNER JOIN tb_seminar_tempat tst ON tst.id = tsj.id_seminar_ruangan
+		// 	INNER JOIN tb_mhs_pilih_perusahaan tmpp ON tmpp.nim = tm.nim
+		// 	INNER JOIN tb_perusahaan tp ON tmpp.id_perusahaan = tp.id_perusahaan")->result();
+	}
 }

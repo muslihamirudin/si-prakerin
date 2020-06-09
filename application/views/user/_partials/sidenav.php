@@ -62,6 +62,16 @@ if($level == 'mahasiswa'){
 									</li>
 								<?php endforeach; ?>
 							<?php endif; ?>
+						<?php if ($level == 'peserta'): ?>
+								<?php foreach ($menus as $menu): ?>
+									<li class="nav-item">
+										<a class="nav-link" href="<?php echo $menu->href ?>">
+											<i class="ni ni-<?php echo $menu->icon ?> text-<?php echo $menu->color ?>"></i>
+											<span class="nav-link-text"><?php echo $menu->name ?></span>
+										</a>
+									</li>
+								<?php endforeach; ?>
+							<?php endif; ?>
 					</ul>
 					<!-- Divider -->
 					<hr class="my-3">

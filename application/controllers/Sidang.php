@@ -298,6 +298,7 @@ class Sidang extends CI_Controller
 		$data['jadwalku'] = $this->seminar_model->get_jadwal($where);
 		$this->load->view('user/sidang_jadwal', $data);
 	}
+
 }
 
 /* End of file Magang.php */

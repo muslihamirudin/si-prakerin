@@ -46,6 +46,14 @@ if (!function_exists('getmenu')) {
 						'href' => site_url('kelengkapan'))
 				);
 				break;
+			case 'peserta':
+				$menus = array(
+					(object)array('name' => 'Jadwal Seminar',
+						'icon' => 'calendar-grid-58',
+						'color' => 'green',
+						'href' => site_url('seminarpeserta')),
+				);
+				break;
 			default:
 				break;
 		endswitch;
