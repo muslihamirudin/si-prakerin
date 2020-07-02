@@ -14,6 +14,7 @@
 	<!-- BreadCrumb PHP -->
 	<?php $this->load->view('user/_partials/breadcrumb.php'); ?>
 	<!-- Page content -->
+	
 	<div class="container-fluid mt--6" data-step="1"
 		 data-intro="Selamat datang di SIMPKL (Sistem Informasi Manajemen Praktik Kerja Lapangan)!">
 		<div class="row">
@@ -59,10 +60,12 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 								<strong>Informasi</strong>
+								
 								<h5><?php echo $informasi->pesan ?> <a href="<?php echo $informasi->uri ?>"><b>Klik disini untuk mengisi</b></a></h5>
 							</div>
 						<?php endif; ?>
-
+						
+						
 					</div>
 				</div>
 			</div>
@@ -91,6 +94,7 @@
 							</br>
 							<h3 id="judcount">Waktu Menuju Seminar :</h3>
 							<h1 id="count"></h1>
+
 							<?php $tanggal_mulai= date('Y-m-d',strtotime(explode('T',$waktusem->mulai)[0]));?>
 									
 							<script>
@@ -123,11 +127,9 @@
 								$('#titel').hide();
 								$('#count').hide();
 								$('#judcount').hide();
-
+								// document.getElementById("count").innerHTML = "Expired";
 							}
 							}, 1000);
-
-						
 							</script>
 						</div>
 					<?php endif; ?>
@@ -135,7 +137,85 @@
 			</div>
 		</div>
 
-	
+<div class="row">
+			<div class="col-xl-4">
+				<div class="row">
+					<div class="col-xl-12 col-lg-12"></div>
+				</div>
+			</div>
+			<div class="col-xl-8">
+				
+				<div class="card">
+					<?php error_reporting(0); ?>
+					<?php $level = $this->session->userdata('level'); ?>
+					<?php if ($level === 'mahasiswa') : //mahasiswa?>
+						<div class="card-header">
+							<h5 class="h3 mb-0">Pengingat Revisi</h5>
+						</div>
+						<div class="card-body">
+							<h3 id="titel2">Hari Seminar : <?php foreach ($jadwalku as $waktusem2): ?>
+							<?php echo nama_hari(explode('T',$waktusem2->berakhir)[0]).', '. tgl_indo(explode('T',$waktusem2->berakhir)[0]); ?>
+							<?php endforeach ?></h3>
+						
+							</br>
+							<h3 id="judcount2">Masa Revisi Anda Berakhir Pada :</h3>
+							<h1 id="count2"></h1>
+							<?php $tanggal_mulai2= date('Y-m-d', strtotime('+1 days', strtotime(explode('T',$waktusem2->berakhir)[0])));?>
+									
+							<script>
+							//Countdown Waktu Menuju Seminar
+							// Set the date we're counting down to
+							var countDownDate2 = new Date('<?= date("m/d/Y", strtotime('+7 days', strtotime($tanggal_mulai2))); ?>').getTime();
+
+							// Update the count down every 1 second
+							var m = setInterval(function() {
+
+							// Get today's date and time
+							var now2 = new Date().getTime();
+
+							// Find the distance between now and the count down date
+							var distance2 = countDownDate2 - now2;
+
+							// Time calculations for days, hours, minutes and seconds
+							var days2 = Math.floor(distance2 / (1000 * 60 * 60 * 24));
+							var hours2 = Math.floor((distance2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+							var minutes2 = Math.floor((distance2 % (1000 * 60 * 60)) / (1000 * 60));
+							var seconds2 = Math.floor((distance2 % (1000 * 60)) / 1000);
+
+							// Display the result in the element with id="demo"
+							document.getElementById("count2").innerHTML = days2 + " Hari : " + hours2 + " Jam : "
+							+ minutes2 + " Menit : " + seconds2 + " Detik ";
+							
+							// If the count down is finished, write some text
+							if (distance2 < 0) {
+								clearInterval(m);
+								document.getElementById("count2").innerHTML = "Revisi Belum Selesai. Segera Selesaikan Revisi Anda!";
+								} 
+							}, 1000);
+						
+							</script>
+						</div>
+
+						<?php
+						$select = 'tb_seminar_penilaian.id_seminar_jadwal, tb_seminar_penilaian.status_revisi, tb_history_seminar_penilaian.tanggal_revisi, tb_history_seminar_penilaian.update_time, COUNT(tb_seminar_penilaian.status_revisi) AS jumber';
+						$join = array('tb_history_seminar_penilaian','tb_seminar_penilaian.id = tb_history_seminar_penilaian.id_seminar_penilaian','INNER');
+						$where="tb_seminar_penilaian.id_seminar_jadwal='$waktusem->id'";
+						$query= datajoin('tb_seminar_penilaian', $where, $select, $join, null);?>
+						<?php foreach ($query as $key => $querynya): ?>
+							<?php if ($querynya->jumber === '3'): ?>
+								<script>
+								$('#judcount').hide();
+								clearInterval(m);
+								document.getElementById("count2").innerHTML = "Revisi Anda Selesai. Silakan Pemberkasan!";
+								</script>
+								<?php else: ?>
+								<h5></h5>
+								<?php endif ?>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-xl-4">
 				<div class="row">
@@ -260,7 +340,10 @@
 
 						<?php else : //mahasiswa?>
 						<p class="text-center text-sm"></p>
-						<div id="div-mode-bimbingan" class="text-md-center text-warning font-weight-bold"></div>
+						<div id="div-mode-bimbingan" class="text-md-center text-warning font-weight-bold">
+						
+						</div>
+						
 						<div style="max-height: 400px;overflow-x: scroll;-ms-overflow-x: scroll">
 						</div>			
 						<?php endif; ?>
@@ -268,6 +351,78 @@
 				</div>
 			</div>
 		</div>
+
+		<?php $level = $this->session->userdata('level'); ?>
+		<?php if ($level === 'peserta') : ?>					
+		<div class="row">
+				<div class="col-md-12 col-xs-12">
+					<div class="card">
+						<?php $lihat = $lihat ? $lihat : array();
+						if ($lihat): ?>
+						<?php foreach ($lihat as $lihatpes): ?>
+						<div class="card-header">
+						<h2 class="mb-0">Anda Mengikuti Seminar: <?php echo $lihatpes->jumlah ?> Kali</h2>
+						<p class="text-sm mb-0">Berikut Detail Seminar yang Anda Ikuti </p>	
+						</div>
+						<div class="card-body">	
+						<?php
+						$select = 'tb_peserta_lihat_seminar.id_lihat, tb_peserta_lihat_seminar.nimpes, tb_peserta.namapes, tb_peserta_lihat_seminar.status, tb_seminar_jadwal.mulai, tb_dosen_bimbingan_mhs.nim, tb_mahasiswa.nama_mahasiswa, tb_dosen_bimbingan_mhs.judul_laporan_mhs, tb_program_studi.nama_program_studi, tb_dosen_bimbingan_mhs.nip_nik, tb_pegawai.nama_pegawai';
+						$join = array(
+							array('tb_seminar_jadwal', 'tb_seminar_jadwal.id = tb_peserta_lihat_seminar.id', 'INNER'),
+							array('tb_dosen_bimbingan_mhs', 'tb_dosen_bimbingan_mhs.id_dosen_bimbingan_mhs= tb_seminar_jadwal.id_dosen_bimbingan_mhs', 'INNER'),
+							array('tb_mahasiswa', 'tb_mahasiswa.nim = tb_dosen_bimbingan_mhs.nim', 'INNER'),
+							array('tb_pegawai', 'tb_pegawai.nip_nik = tb_dosen_bimbingan_mhs.nip_nik', 'INNER'),
+							array('tb_peserta', 'tb_peserta.nimpes = tb_peserta_lihat_seminar.nimpes', 'INNER'),
+							array('tb_program_studi', 'tb_program_studi.id_program_studi = tb_mahasiswa.id_program_studi', 'INNER')
+						);
+						$where="tb_peserta_lihat_seminar.nimpes= '$lihatpes->nimpes' AND tb_peserta_lihat_seminar.status = 'accept'";
+						$listpes= datajoin('tb_peserta_lihat_seminar', $where, $select, $join, null, 'tb_seminar_jadwal.mulai ');?>
+															
+						<?php if (count($listpes) == 0): ?>
+						<h4 class="text-center">Anda Belum Mengkuti Seminar Sama Sekali</h4>
+						<?php endif ?>
+						<?php foreach ($listpes as $key => $listpeserta): ?>
+						<a class="list-group-item list-group-item-action flex-column align-items-start py-4 px-4">
+							<div
+								class="d-flex row justify-content-between align-items-center">
+								<div class="col col-xs-12">
+									<small>No:</small>
+									<h5 class="mb-0"><?php echo $key+1 ?></h5>
+								</div>
+								<div class="col col-xs-12">
+									<small>Tanggal:</small>
+									<?php
+									$tugl = explode('T', $listpeserta->mulai)[0];
+									?>
+									<h5 class="mb-0"><?php echo nama_hari($tugl).', '. tgl_indo($tugl); ?></h5>	
+								</div>
+								<div class="col col-xs-12">
+									<small>Judul Seminar:</small>
+									<h5 class="mb-0"><?php echo $listpeserta->judul_laporan_mhs ?></h5>
+								</div>
+								<div class="col col-xs-12">
+									<small>Nama Penyaji:</small>
+									<h5 class="mb-0">
+										<?php echo $listpeserta->nama_mahasiswa ?> (<?php echo $listpeserta->nim?>)</h5>
+								</div>
+								<div class="col col-xs-12">
+									<small>Jurusan Penyaji :</small>
+									<h5 class="mb-0"><?php echo $listpeserta->nama_program_studi ?></h5>
+								</div>
+								<div class="col col-xs-12">
+									<small>Pembimbing :</small>
+									<h5 class="mb-0"><?php echo $listpeserta->nama_pegawai?></h5>
+								</div>
+							</div>
+						</a>
+						<?php endforeach; ?>	
+						<?php endforeach; ?>
+						<?php endif; ?>
+						</div>
+					</div>
+				</div>
+		</div>
+		<?php endif; ?>
 		<?php $this->load->view('user/_partials/footer'); ?>
 	</div>
 	

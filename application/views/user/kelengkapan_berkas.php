@@ -26,14 +26,73 @@ $mhs = masterdata('tb_mahasiswa', "nim = '$nim'", 'nama_mahasiswa nama') ?>
 					<div class="card-header">
 						<!-- Title -->
 						<div class="h2">Kelengkapan berkas</div>
+						<?php error_reporting(0); ?>
+						<?php foreach ($jadwalku as $waktusem): ?>
+						<?php
+						$select = 'tb_seminar_penilaian.id_seminar_jadwal, tb_seminar_penilaian.status_revisi, tb_history_seminar_penilaian.tanggal_revisi, tb_history_seminar_penilaian.update_time';
+						$join = array('tb_history_seminar_penilaian','tb_seminar_penilaian.id = tb_history_seminar_penilaian.id_seminar_penilaian','INNER');
+						$where="update_time IN (SELECT MAX(update_time) FROM tb_history_seminar_penilaian WHERE id_seminar_jadwal='$waktusem->id')";
+						$query= datajoin('tb_seminar_penilaian', $where, $select, $join, null);?>
+						<?php foreach ($query as $key => $querynya): ?>
+						<?php $tglpem = $querynya->update_time ?>
+						<?php endforeach; ?>
+						<?php endforeach; ?>
+
+						<h3 id="judcount">Waktu Pengumpulan Berkas :</h3>
+							<h1 id="count"></h1>
+
+							<?php $tanggal_mulai= date('Y-m-d',strtotime(explode('T',$tglpem)[0]));?>
+									
+							<script>
+							//Countdown Waktu Menuju Seminar
+							// Set the date we're counting down to
+							var countDownDate = new Date('<?= date("m/d/Y", strtotime('+7 days',strtotime($tanggal_mulai))); ?>').getTime();
+
+							// Update the count down every 1 second
+							var z = setInterval(function() {
+
+							// Get today's date and time
+							var now = new Date().getTime();
+
+							// Find the distance between now and the count down date
+							var distance = countDownDate - now;
+
+							// Time calculations for days, hours, minutes and seconds
+							var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+							var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+							var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+							var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+							// Display the result in the element with id="demo"
+							document.getElementById("count").innerHTML = days + " Hari : " + hours + " Jam : "
+							+ minutes + " Menit : " + seconds + " Detik ";
+							
+							// If the count down is finished, write some text
+							if (distance < 0) {
+								clearInterval(z);
+								document.getElementById("count").innerHTML = "Pemberkasan Anda Telat Lebih dari 7 Hari";
+							}
+							}, 1000);
+							</script>
 					</div>
 					<!-- Card body -->
 					<div class="card-body">
+						
 						<!-- List group -->
 						<?php $allow = isset($allow) ? $allow : false; ?>
 						<?php if (!$allow && !isset($status)): ?>
+							<script>
+							clearInterval(z);
+							$('#judcount').hide();
+							$('#count').hide();
+							</script>
 							<div class="h2">Anda belum bisa upload kelengkapan berkas</div>
 						<?php elseif (!$allow && isset($status)): ?>
+							<script>
+							clearInterval(z);
+							$('#judcount').hide();
+							$('#count').hide();
+							</script>
 							<div class="h3">ANDA TELAH MENGUPLOAD FILE PEMBERKASAN</div>
 						<?php else: ?>
 							<div class="h5">Silahkan upload berkas anda disini</div>

@@ -50,7 +50,7 @@ class Peserta extends CI_Controller
         }
         //get variable
 		//sub menu, with crud
-		$get = $this->input->get();
+		$get = $this->input->get();  
 		if (isset($get['m'])) {
 			switch ($get['m']) {
 				case 'pesertaseminar':
@@ -64,9 +64,6 @@ class Peserta extends CI_Controller
 						return $this->remove_peserta();
 					}
 					return $this->index_peserta();
-                    break;
-                case 'versem':
-					return $this->index_versem();
                     break;
                 default:
 					redirect(site_url('peserta'));

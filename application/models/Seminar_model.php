@@ -2,7 +2,33 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Seminar_model extends CI_Model
-{
+{	
+	private $_table = "tb_peserta_lihat_seminar";
+	private $_table2 = "tb_dosen_bimbingan_mhs";
+	private $_primary_key = "id_lihat";
+
+	public $id_lihat;
+	public $nimpes;
+	public $id;
+	public $status;
+
+	public function rules()
+	{
+		return [
+			['field' => 'nimpes',
+			'label' => 'NIMPeserta',
+			'rules' => 'required'],
+
+			['field' => 'id',
+			'label' => 'IDSeminar',
+			'rules' => 'required'],
+
+			['field' => 'status',
+			'label' => 'Status',
+			'rules' => 'required'],
+		];
+	}
+
 	public function get_tempat_seminar($alias = null)
 	{
 		$post = $this->input->post();
@@ -502,21 +528,80 @@ class Seminar_model extends CI_Model
 		return $hasil;
 	}
 
-	public function get_jadwal_sempes()
+	public function get_jadwal_sempes($date, $time=null)
 	{
-		$hasil=$this->db->query("SELECT tsj.id, tm.nim, tm.nama_mahasiswa, tdbm.judul_laporan_mhs, tst.nama, tsj.mulai, tsj.berakhir, tp.nama_perusahaan FROM tb_seminar_jadwal tsj
+		$where = "WHERE ";
+		$datetime = $time ? $date . 'T' . $time : $date;
+		$where .= " tsj.mulai like '$datetime%'";
+		$hasil=$this->db->query("SELECT tsj.id, tm.nim, tm.nama_mahasiswa, tdbm.judul_laporan_mhs, tst.nama, tsj.mulai start, tsj.berakhir end, tpg.nama_pegawai, tp.nama_perusahaan FROM tb_seminar_jadwal tsj
 			INNER JOIN tb_dosen_bimbingan_mhs tdbm ON tsj.id_dosen_bimbingan_mhs = tdbm.id_dosen_bimbingan_mhs
 			INNER JOIN tb_mahasiswa tm ON tm.nim = tdbm.nim
 			INNER JOIN tb_seminar_tempat tst ON tst.id = tsj.id_seminar_ruangan
 			INNER JOIN tb_mhs_pilih_perusahaan tmpp ON tmpp.nim = tm.nim
-			INNER JOIN tb_perusahaan tp ON tmpp.id_perusahaan = tp.id_perusahaan")->result();
+			INNER JOIN tb_perusahaan tp ON tmpp.id_perusahaan = tp.id_perusahaan
+			INNER JOIN tb_pegawai tpg ON tdbm.nip_nik = tpg.nip_nik $where ORDER BY start")->result();
 		return $hasil;
-		// return $this->db->query("
-		// 	SELECT tsj.id, tm.nim, tm.nama_mahasiswa, tdbm.judul_laporan_mhs, tst.nama, tsj.mulai, tsj.berakhir, tp.nama_perusahaan FROM tb_seminar_jadwal tsj
-		// 	INNER JOIN tb_dosen_bimbingan_mhs tdbm ON tsj.id_dosen_bimbingan_mhs = tdbm.id_dosen_bimbingan_mhs
-		// 	INNER JOIN tb_mahasiswa tm ON tm.nim = tdbm.nim
-		// 	INNER JOIN tb_seminar_tempat tst ON tst.id = tsj.id_seminar_ruangan
-		// 	INNER JOIN tb_mhs_pilih_perusahaan tmpp ON tmpp.nim = tm.nim
-		// 	INNER JOIN tb_perusahaan tp ON tmpp.id_perusahaan = tp.id_perusahaan")->result();
+	// 	// return $this->db->query("
+	// 	// 	SELECT tsj.id, tm.nim, tm.nama_mahasiswa, tdbm.judul_laporan_mhs, tst.nama, tsj.mulai, tsj.berakhir, tp.nama_perusahaan FROM tb_seminar_jadwal tsj
+	// 	// 	INNER JOIN tb_dosen_bimbingan_mhs tdbm ON tsj.id_dosen_bimbingan_mhs = tdbm.id_dosen_bimbingan_mhs
+	// 	// 	INNER JOIN tb_mahasiswa tm ON tm.nim = tdbm.nim
+	// 	// 	INNER JOIN tb_seminar_tempat tst ON tst.id = tsj.id_seminar_ruangan
+	// 	// 	INNER JOIN tb_mhs_pilih_perusahaan tmpp ON tmpp.nim = tm.nim
+	// 	// 	INNER JOIN tb_perusahaan tp ON tmpp.id_perusahaan = tp.id_perusahaan")->result();
 	}
+
+	public function gabung_seminar(){
+		$post = $this->input->post();
+		$this->nimpes = $post["nimpes"];
+		$this->id = $post["id"];
+		$this->status= $post["status"];
+		return $this->db->insert($this->_table, $this);
+	}
+	
+	public function get_all_with_pes($id = null)
+	{
+		$this->db->reset_query();
+		$where = null;
+		if ($id) {
+			$where = array('tb_dosen_bimbingan_mhs.nip_nik' => $id);
+		}
+		$join = array('tb_mahasiswa', 'tb_mahasiswa.nim = tb_dosen_bimbingan_mhs.nim', 'inner join');
+		return datajoin($this->_table2, $where, 'tb_mahasiswa.nama_mahasiswa,tb_dosen_bimbingan_mhs.*', $join);
+	}
+
+	public function accept()
+	{
+		$get = $this->input->get();
+		if (isset($get['id'])) {
+			$this->db->set(array('status' => 'accept'));
+			$this->db->where(array($this->_primary_key => $get['id']));
+			return $this->db->update($this->_table);
+		}
+		return false;
+	}
+
+	public function decline()
+	{
+		$get = $this->input->get();
+		if (isset($get['id'])) {
+			$this->db->set(array('status' => 'reject'));
+			$this->db->where(array($this->_primary_key => $get['id']));
+			return $this->db->update($this->_table);
+		}
+		return false;
+	}
+
+	public function count_lihatsem($id)
+	{
+		$hasil=$this->db->query("SELECT nimpes, COUNT(status) AS jumlah FROM tb_peserta_lihat_seminar WHERE status='accept' AND nimpes='$id'")->result();
+		return $hasil;
+	}
+
+	public function accberjamaah($id)
+	{
+		$this->db->set(array('status' => 'accept'));
+		$this->db->where('id_lihat', $id);
+		$this->db->update($this->_table);
+	}
+
 }

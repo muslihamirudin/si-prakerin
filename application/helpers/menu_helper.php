@@ -23,7 +23,7 @@ if (!function_exists('getmenu')) {
 					(object)array('name' => 'Peserta Seminar',
 						'icon' => 'building',
 						'color' => 'orange',
-						'href' => site_url('peserta'))
+						'href' => site_url('seminarpeserta'))
 				);
 				break;
 			case 'mahasiswa':

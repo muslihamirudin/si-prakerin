@@ -15,6 +15,7 @@ $data_seminar = isset($data_seminar) ? $data_seminar : null;
 $is_file = null;
 $reupload = false;
 $success = false;
+error_reporting(0);
 if (count($data_seminar) > 0) {
 	$is_file = check_already_upload($data_seminar[0]->id_jadwal);
 	if (count($is_file) > 0) {
@@ -86,7 +87,6 @@ $mhs = masterdata('tb_mahasiswa', "nim = '$nim'", 'nama_mahasiswa nama') ?>
 					if (distance2 < 0) {
 						clearInterval(x);
 						$('#count2').hide();
-
 					}
 					}, 1000);
 

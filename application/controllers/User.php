@@ -49,6 +49,7 @@ class User extends CI_Controller
 
 				$data['jadwalku'] = $this->seminar_model->tampil_tgl($id);
 
+
 				break;
 			case 'dosen':
 				$data['menus'] = array(
@@ -71,6 +72,8 @@ class User extends CI_Controller
 						'message_intro' => 'SIG Perusahaan merupakan aplikasi geografis perusahaan, meliputi letak geografis, dan data penting terkait perusahaan magang anda',
 						'desc' => 'Sistem Informasi Pemetaan Mahasiswa yang melaksanakan Praktik Kerja Industri Politeknik Negeri Tanah Laut'),
 				);
+
+				$data['lihat'] = $this->seminar_model->count_lihatsem($id);
 				break;
 			default:
 				$data['menus'] = array();

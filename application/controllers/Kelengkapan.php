@@ -5,7 +5,7 @@ class Kelengkapan extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array('kelengkapan_model', 'penilaian_model'));
+		$this->load->model(array('kelengkapan_model', 'penilaian_model','seminar_model'));
 		$this->load->helper('upload');
 		!$this->session->userdata('level') ? redirect(site_url('main')) : null;
 	}
@@ -24,6 +24,8 @@ class Kelengkapan extends CI_Controller
 					redirect(site_url('kelengkapan'));
 			}
 		}
+		$id = $this->session->userdata('id');
+		$data['jadwalku'] = $this->seminar_model->tampil_tgl($id);
 		$nim = $this->session->userdata('id');
 		$dsn_bimbingan = masterdata('tb_dosen_bimbingan_mhs', "nim = '$nim'", 'id_dosen_bimbingan_mhs id');
 		if (isset($dsn_bimbingan->id)) {
@@ -65,6 +67,7 @@ class Kelengkapan extends CI_Controller
 				}
 			}
 		}
+		
 		$this->load->view('user/kelengkapan_berkas', $data);
 	}
 
@@ -82,6 +85,7 @@ class Kelengkapan extends CI_Controller
 		} else {
 			show_error('failed upload', 500);
 		}
+
 
 	}
 }
